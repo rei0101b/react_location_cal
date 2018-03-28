@@ -1,0 +1,14 @@
+.geocodeResult {
+  background-color: skyblue;
+  width: 600px;
+  height: 100px;
+  margin: 0 auto 0 auto;
+  position: relative;
+}
+
+.ul {
+  padding-left: 20px;
+  list-style: none;
+  text-align: left;
+  position: absolute;
+}

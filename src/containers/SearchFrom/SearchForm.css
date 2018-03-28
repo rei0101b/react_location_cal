@@ -1,0 +1,21 @@
+.searchForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: pink;
+  width: 600px;
+  height: 100px;
+  margin: 0 auto 0 auto;
+}
+
+.input {
+  width: 400px;
+  height: 30px;
+}
+
+.button {
+  margin-left: 10px;
+  height: 30px;
+  width: 70px;
+  border-radius: 10px;
+}
