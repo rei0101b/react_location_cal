@@ -1,0 +1,17 @@
+
+.hotelsTable {
+  background-color: lightgreen;
+  width: 600px;
+  height: 600px;
+  overflow: scroll;
+  scroll-behavior: smooth;
+}
+
+.title {
+  display: flex;
+}
+
+.title p {
+  width: 130px;
+
+}

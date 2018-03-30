@@ -6,10 +6,8 @@ import GeocodeResult from './components/GeocodeResult/GeocodeResult'
 import Map from './components/Map/Map'
 import axios from 'axios'
 import { geocode } from './domain/Geocoder'
-
-
-const geocodeEndPont = 'https://maps.googleapis.com/maps/api/geocode/json';
-const key = 'AIzaSyCpFPY0GL2Rfi0WVTr83difrXs1jJUno4s';
+import HotelsTable from './components/HotelsTable/HotelsTable';
+import { searchHotelByLocation } from './domain/HotelRepository';
 
 class App extends Component {
   state = {
@@ -17,7 +15,9 @@ class App extends Component {
         address: '',
         lat: 'ss',
         lng: 'test',
-      }
+      },
+      hotels: [
+      ]
   }
 
   searchFromHandler(place) {
@@ -26,11 +26,19 @@ class App extends Component {
         this.setState({
           geocode: geocode
         })
+        searchHotelByLocation(geocode)
+          .then((hotels) => {
+            console.log(hotels);
+            this.setState({
+              hotels: hotels
+            })
+          })
       })
   }
 
   render() {
     const {address, lat, lng} = this.state.geocode
+    console.log(this.state.hotels);
     return (
       <div className={styles.app}>
         <div>
@@ -40,7 +48,10 @@ class App extends Component {
           onClick={(place) => this.searchFromHandler(place)}
         />
         <GeocodeResult address={address} lat={lat} lng={lng} />
-        <Map lat={lat} lng={lng}/>
+        <div className={styles.result}>
+          <Map lat={lat} lng={lng}/>
+          <HotelsTable hotels={this.state.hotels}/>
+        </div>
       </div>
     );
   }
