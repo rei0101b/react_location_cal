@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import './App.scss';
 import styles from './App.scss';
 import SearchFrom from './containers/SearchFrom/SearchFrom'
@@ -9,6 +10,9 @@ import { geocode } from './domain/Geocoder'
 import HotelsTable from './components/HotelsTable/HotelsTable';
 import { searchHotelByLocation } from './domain/HotelRepository';
 
+const sortedHotels = (hotels, sortKey) => _.sortBy(hotels, h => h[sortKey]);
+
+
 class App extends Component {
   state = {
     geocode: {
@@ -16,8 +20,39 @@ class App extends Component {
         lat: 'ss',
         lng: 'test',
       },
+      sortKey: 'price',
       hotels: [
-      ]
+      ],
+  }
+
+  componentWillMount(){
+    console.log('componentWillMount');
+  }
+
+  componentDidMount() {
+    console.log('componentDidMount');
+  }
+
+  componentWillReceiveProps() {
+    console.log('componentWillReceiveProps');
+    console.log(this.state);
+  }
+
+  shouldComponentUpdate() {
+    console.log('shouldComponentUpdate');
+    return true
+  }
+
+  componentWillUpdate() {
+    console.log('componentWillUpdate');
+  }
+
+  componentDidUpdate() {
+    console.log('componentDidUpdate');
+  }
+
+  componentWillUnmount() {
+    console.log('componentWillUnmount');
   }
 
   searchFromHandler(place) {
@@ -30,13 +65,20 @@ class App extends Component {
           .then((hotels) => {
             console.log(hotels);
             this.setState({
-              hotels: hotels
+              hotels: sortedHotels(hotels, this.state.sortKey)
             })
           })
       })
   }
 
+  handleSortKeyChange = (sortKey) => {
+    this.setState({
+      sortKey: sortKey,
+      hotels: sortedHotels(this.state.hotels, sortKey)})
+  }
+
   render() {
+    console.log('render');
     const {address, lat, lng} = this.state.geocode
     console.log(this.state.hotels);
     return (
@@ -50,7 +92,10 @@ class App extends Component {
         <GeocodeResult address={address} lat={lat} lng={lng} />
         <div className={styles.result}>
           <Map lat={lat} lng={lng}/>
-          <HotelsTable hotels={this.state.hotels}/>
+          <HotelsTable
+            hotels={this.state.hotels}
+            onSort={(sortKey) => this.handleSortKeyChange(sortKey)}
+            sortKey={this.state.sortKey}/>
         </div>
       </div>
     );
