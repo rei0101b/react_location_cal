@@ -14,7 +14,6 @@ export const searchHotelByLocation = ({lat, lng}) => {
      .then((result) => {
        return result.data.hotels.map((hotelObject) => {
          const basicInfo = hotelObject.hotel[0].hotelBasicInfo
-         console.log(basicInfo);
          return {
            id: basicInfo.hotelNo,
            name: basicInfo.hotelName,

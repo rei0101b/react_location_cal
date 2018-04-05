@@ -9,7 +9,6 @@ export const geocode = (place) => {
     axios
       .get(geocodeEndPont + '?address=' + place + '&key=' + key)
       .then((results) => {
-        console.log(results);
         const data = results.data;
         const result = data.results[0];
         const location = result.geometry.location;

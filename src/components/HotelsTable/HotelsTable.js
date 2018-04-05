@@ -10,7 +10,6 @@ const labelKeys = [
 ]
 
 const hotelsTable = ({hotels, onSort, sortKey}) => {
-  console.log(labelKeys);
   return (
     <div className={styles.hotelsTable}>
       <div className={styles.title}>

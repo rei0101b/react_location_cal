@@ -15,7 +15,7 @@ const InnerMap = withGoogleMap((props) => {
 })
 
 const Map = ({ lat, lng }) => {
-  const position = { lat, lng}
+  const position = { lat, lng }
   return (
     <InnerMap
       containerElement={(<div />)}
