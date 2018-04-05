@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
 import './SearchPage.scss';
 import styles from './SearchPage.scss';
 import SearchFrom from '../../components/SearchFrom/SearchFrom';
@@ -10,54 +9,11 @@ import { connect } from 'react-redux';
 import HotelsTable from '../../components/HotelsTable/HotelsTable';
 
 import PropTypes from 'prop-types';
-import queryString from 'query-string';
-
-const sortedHotels = (hotels, sortKey) => _.sortBy(hotels, h => h[sortKey]);
+import { startSearch } from '../../actions'
 
 class SearchPage extends Component {
-  state = {
-    place: this.getPlaceParams() || '',
-    geocode: {
-        address: '',
-        lat: 'ss',
-        lng: 'test',
-      },
-      sortKey: 'price',
-      hotels: [
-      ],
-  }
-
   componentDidMount() {
-    // const place = this.getPlaceParams();
-    // if (place) {
-    //   this.startSearch(place);
-    // }
-  }
-
-  componentWillunmount() {
-  }
-
-  // searchFromHandler(place) {
-  //   this.props.history.push(`/?place=${place}`);
-  //   this.startSearch(place);
-  // }
-
-  getPlaceParams() {
-    const params = queryString.parse(this.props.location.search);
-    const place = params.place
-    if (place && place.length > 1) {
-      return place
-    }
-    return null;
-  }
-
-  // startSearch = (place) => {
-  // }
-
-  handleSortKeyChange = (sortKey) => {
-    this.setState({
-      sortKey: sortKey,
-      hotels: sortedHotels(this.state.hotels, sortKey)})
+    this.props.dispatch(startSearch());
   }
 
   render() {
@@ -67,15 +23,11 @@ class SearchPage extends Component {
         <div>
           <h1 className={styles.title}>緯度経度検索</h1>
         </div>
-        <SearchFrom />
+        <SearchFrom history={this.props.history}/>
         <GeocodeResult address={address} lat={lat} lng={lng} />
         <div className={styles.result}>
           <Map lat={lat} lng={lng}/>
-          {/*<HotelsTable
-            hotels={this.state.hotels}
-            onSort={(sortKey) => this.handleSortKeyChange(sortKey)}
-            sortKey={this.state.sortKey}/>
-          */}
+          <HotelsTable />
         </div>
       </div>
     );
@@ -83,7 +35,7 @@ class SearchPage extends Component {
 }
 
 SearchPage.propTypes = {
-  // history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
   location: PropTypes.shape({ search: PropTypes.string }).isRequired,
   geocodeResult: PropTypes.shape({
     address: PropTypes.string.isRequired,
@@ -94,6 +46,7 @@ SearchPage.propTypes = {
 
 const mapStateToProps = (state) => ({
   geocodeResult: state.geocodeResult,
+  hotels: state.hotels,
 })
 
 

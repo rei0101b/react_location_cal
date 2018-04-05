@@ -1,19 +1,19 @@
 import React from 'react';
 import styles from './SearchForm.css';
 import { connect } from 'react-redux';
-import { geocode } from '../../domain/Geocoder';
 // import { searchHotelByLocation } from '../../domain/HotelRepository';
-import { setPlace } from '../../actions';
+import { setPlace, startSearch } from '../../actions';
+import PropTypes from 'prop-types';
 
 
-
-const searchFrom = (props) => {
+const searchForm = (props) => {
   return (
     <form
       className={styles.searchForm}
       onSubmit={(e) => {
         e.preventDefault();
-        props.onSubmit(props.place)
+        props.history.push(`/?place=${props.place}`);
+        props.startSearch()
       }}
       >
       <input
@@ -22,37 +22,22 @@ const searchFrom = (props) => {
         value={props.place}
         onChange={(e)=> {
           e.preventDefault();
-          props.onPlaceChange(e.target.value);
+          props.setPlace(e.target.value);
         }}/>
       <input type="submit" className={styles.button} value="検索"/>
     </form>
   )
 }
 
+searchForm.propTypes = {
+  place: PropTypes.string.isRequired,
+  setPlace: PropTypes.func.isRequired,
+  startSearch: PropTypes.func.isRequired,
+}
 
-const mapStateToProps = (state) => ({
-  place: state.place,
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  onPlaceChange: place => dispatch(setPlace(place)),
-  onSubmit: (place) => {
-    geocode(place)
-      .then((geocode) => {
-        dispatch({ type: 'GEOCODE_FETCHED', geocode: geocode });
-        // this.setState({
-        //   geocode: geocode,
-        //   place: place
-        // })
-        // searchHotelByLocation(geocode)
-        //   .then((hotels) => {
-        //     this.setState({
-        //       hotels: sortedHotels(hotels, this.state.sortKey)
-        //     })
-        //   })
-      })
-
-  }
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(searchFrom);
+export default connect(
+  state => ({
+    place: state.place,
+  }),
+  { setPlace, startSearch },
+)(searchForm);

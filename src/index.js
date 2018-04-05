@@ -1,25 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-// import App from './App';
-import SearchPage from './containers/SearchPage/SearchPage';
+import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import reducer from './reducers/';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 const store = createStore(
   reducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  composeWithDevTools(applyMiddleware(thunk)),
 );
-
 
 ReactDOM.render(
   <Provider store={store}>
-    <SearchPage
-      history={window.history}
-      location={window.location}
-    />
+    <App />
   </Provider>,
   document.getElementById('root')
 );

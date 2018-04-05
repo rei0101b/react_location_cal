@@ -2,6 +2,8 @@ import React from 'react';
 import styles from './HotelsTable.css';
 import HotelsRow from './HotelsRow/HotelsRow'
 import HotelClickSort from './HotelSortClick/HotelSortClick'
+import { connect } from 'react-redux';
+import _ from 'lodash';
 
 const labelKeys = [
   {label: '値段', k: 'price'},
@@ -18,9 +20,9 @@ const hotelsTable = ({hotels, onSort, sortKey}) => {
         { labelKeys.map((item) => (
           <HotelClickSort
             label={item.label}
-            sortKey={sortKey}
-            onSort={(key)=>onSort(key)}
-            k={item.k}/>
+            sortKey={item.k}
+            key={item.k}
+          />
         )) }
       </div>
       {hotels.map((hotel) => (<HotelsRow key={hotel.id} hotel={hotel} />))}
@@ -28,5 +30,9 @@ const hotelsTable = ({hotels, onSort, sortKey}) => {
   )
 }
 
+const sortedHotels = (hotels, sortKey) => _.sortBy(hotels, h => h[sortKey]);
 
-export default hotelsTable
+export default connect(
+  state => ({
+    hotels: sortedHotels(state.hotels, state.sortKey),
+  }))(hotelsTable);

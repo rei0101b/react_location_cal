@@ -10,6 +10,11 @@ export const geocode = (place) => {
       .get(geocodeEndPont + '?address=' + place + '&key=' + key)
       .then((results) => {
         const data = results.data;
+        const status = data.status
+        if (status === 'ZERO_RESULTS') {
+          const geocode = {}
+          return { geocode, status }
+        }
         const result = data.results[0];
         const location = result.geometry.location;
         const geocode = {
@@ -17,7 +22,7 @@ export const geocode = (place) => {
           lat: location.lat,
           lng: location.lng,
         }
-        return geocode
+        return { geocode, status }
       })
   )
 }

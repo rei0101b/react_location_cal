@@ -1,9 +1,16 @@
 import React from 'react'
+import { connect } from 'react-redux';
+import { setSortKey } from '../../../actions';
 
-
-
-const hotelSortClick = ({ label, sortKey, onSort, k}) => (
-  <p onClick={()=>onSort(k)}>{console.log({ label, sortKey, onSort, k})}{label}{sortKey === k ? '▽' : ''}</p>
+const hotelSortClick = (props) => (
+  <p onClick={()=>props.setSortKey(props.sortKey)}>
+    {props.label}{props.isSelected ? '▽' : ''}
+  </p>
 )
 
-export default hotelSortClick
+export default connect(
+  (state, ownProps) => ({
+    isSelected: ownProps.sortKey === state.sortKey,
+  }),
+  { setSortKey }
+)(hotelSortClick);
